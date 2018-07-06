@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>
+    PROYECTO CITA
+</title>
+</head>
+<body id="body">
+  <h1 id="titulo"> PROPONER DIA </h1>
+  <input id="fecha" type="date"></input>
+  <br>
+  <br>
+  <input id="sitio" type="text">
+  <button id="crear" type="submit">CREAR </button>
+  <div id="citas">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script>
+
+
+   $("#crear").click(function(){
+     var dia= $("#fecha").val();
+     var lugar= $("#sitio").val();
+
+     if(lugar && dia){
+         $("#citas").append( "<div class='hora'>"+"<h2>" + dia + "</h2>"+ "<h2>" + lugar + "</h2>" + "</div>")
+           var contador=0
+         $("#citas").append("<button class='votar'>"+ "VOTAR" + "</button>");
+         $("#citas").append("<br><span class='votos'>0 votos</span>");
+         $(document).on("click",".votar",(function(){
+
+             contador ++
+             $(".votos").html(contador)
+             console.log(contador)
+           })
+         )
+         $("#sitio").val("")
+         $("#fecha").val("")
+     }else{
+       alert("Indicar lugar y/o fecha")
+     }
+
+    })
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+</html>
