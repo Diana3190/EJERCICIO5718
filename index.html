@@ -20,8 +20,8 @@
       console.log(res)
       res.forEach(function(datos){
         console.log(datos)
-        var horario=("<h3>"+datos.fecha+"</h3>"+ "<h3>"+datos.lugar+"</h3>" +
-       "<button class='votar'>"+ "VOTAR" +"</button>" + "<button class='restar'>"+ "RESTAR" +"</button>"+"<h2 data-votos='" + datos.votos + "'>" + datos.votos + "</h2>")
+        var horario=("<h3>"+datos.fecha+"</h3> <h3>"+datos.lugar+"</h3>" +
+       "<button data-id='"+ datos.id +"' class='votar'>"+ "VOTAR" +"</button>" + "<button class='restar'>"+ "RESTAR" +"</button>"+"<h2 data-votos='" + datos.votos + "'>" + datos.votos + "</h2>")
         $(".citas").append(horario)
       })
     })
@@ -50,27 +50,47 @@
 
   })
   $(document).on("click",".votar",function(event){
-   var h2=$(event.currentTarget).next().next("h2")
-     console.log(h2)
-      var votosActuales= parseInt(h2.data("votos"))
-      var nuevosVotos= votosActuales + 1
-      h2.text(nuevosVotos + " votos")
-     h2.data("votos", nuevosVotos)
+    if(!$(".restar").click(){
+      return;
 
+    }else{
+    var button=$(event.currentTarget)
+    button.attr('disabled',true)
+   var h2=button.next().next("h2")
+   var id=button.data('id');
+     console.log(h2)
+     $.post("http://192.168.100.11:1337/fecha/sumar/"+ id, {},function(){
+       var votosActuales= parseInt(h2.data("votos"))
+       var nuevosVotos= votosActuales + 1
+       h2.text(nuevosVotos + " votos")
+       h2.data("votos", nuevosVotos)
+
+      })
      })
 
 
+
       $(document).on("click",".restar",function(event){
-
-
+        if($(event.currentTarget).click(){
           var h2=$(event.currentTarget).next("h2")
+          var id=$(event.currentTarget).data('id');
             console.log(h2)
-           var votosActuales= parseInt(h2.data("votos"))
-            var nuevosVotos= votosActuales - 1
-           h2.text(nuevosVotos + " votos")
-            h2.data("votos", nuevosVotos)
-        
-      })
+          $.post("http://192.168.100.11:1337/fecha/sumar/"+ id,{},function(){
+            var votosActuales= parseInt(h2.data("votos"))
+             var nuevosVotos= votosActuales - 1
+            h2.text(nuevosVotos + " votos")
+             h2.data("votos", nuevosVotos)
+             if(nuevosVotos===0){
+               $(event.currentTarget).attr("disabled",true)
+               $(".votar").attr("disabled", false)
+             }
+
+            })
+          })
+
+        })
+
+
 
 
   </script>
