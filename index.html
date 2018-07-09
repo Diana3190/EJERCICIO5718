@@ -11,43 +11,66 @@
   <br>
   <input id="sitio" type="text">
   <button id="crear" type="submit">CREAR </button>
-  <div id="citas">
+  <div class="citas">
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script>
+    var url="http://192.168.100.11:1337/fechas"
+    $.get(url,function(res){
+      console.log(res)
+      res.forEach(function(datos){
+        console.log(datos)
+        var horario=("<h3>"+datos.fecha+"</h3>"+ "<h3>"+datos.lugar+"</h3>" +
+       "<button class='votar'>"+ "VOTAR" +"</button>" + "<button class='restar'>"+ "RESTAR" +"</button>"+"<h2 data-votos='" + datos.votos + "'>" + datos.votos + "</h2>")
+        $(".citas").append(horario)
+      })
+    })
 
 
    $("#crear").click(function(){
      var dia= $("#fecha").val();
      var lugar= $("#sitio").val();
-
      if(lugar && dia){
-         $("#citas").append( "<div class='hora'>"+"<h2>" + dia + "</h2>"+ "<h2>" + lugar + "</h2>" + "</div>")
-           var contador=0
-         $("#citas").append("<button class='votar'>"+ "VOTAR" + "</button>");
-         $("#citas").append("<br><span class='votos'>0 votos</span>");
-         $(document).on("click",".votar",(function(){
+       var urlpost="http://192.168.100.11:1337/fecha"
+         $.post(urlpost,{fecha:dia,lugar:lugar},function(){
+           $(".citas").append( "<div class='col-md-4'>"+"<h2>" + dia + "</h2>"+ "<h2>" + lugar + "</h2>" + "</div>")
+           $(".citas").append("<button class='votar'>"+ "VOTAR" +"</button>");
+          $(".citas").append("<button class='restar'>"+ "restar" +"</button>");
+           $(".citas").append("<h2 data-votos='0'>"+ datos.votos +"</h2>");
 
-             contador ++
-             $(".votos").html(contador)
-             console.log(contador)
-           })
-         )
-         $("#sitio").val("")
-         $("#fecha").val("")
-     }else{
-       alert("Indicar lugar y/o fecha")
-     }
-
-    })
+         });
+       }
 
 
+      //   $("#sitio").val("")
+      //   $("#fecha").val("")
+     //}else{
+    //   alert("Indicar lugar y/o fecha")
+    // }
+
+  })
+  $(document).on("click",".votar",function(event){
+   var h2=$(event.currentTarget).next().next("h2")
+     console.log(h2)
+      var votosActuales= parseInt(h2.data("votos"))
+      var nuevosVotos= votosActuales + 1
+      h2.text(nuevosVotos + " votos")
+     h2.data("votos", nuevosVotos)
+
+     })
 
 
+      $(document).on("click",".restar",function(event){
 
 
-
-
+          var h2=$(event.currentTarget).next("h2")
+            console.log(h2)
+           var votosActuales= parseInt(h2.data("votos"))
+            var nuevosVotos= votosActuales - 1
+           h2.text(nuevosVotos + " votos")
+            h2.data("votos", nuevosVotos)
+        
+      })
 
 
   </script>
